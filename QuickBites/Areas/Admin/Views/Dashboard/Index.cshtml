@@ -1,0 +1,137 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+
+
+}
+@model Quick.Models.ProductDashboardViewModel
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<h2>Product List</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <h4>Categories</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a asp-action="Index" asp-route-categoryId="">All</a>
+            </li>
+            @foreach (var category in Model.Categories)
+            {
+                <li class="list-group-item @(Model.SelectedCategoryId == category.CategoryId ? "active" : "")">
+                    <a asp-action="Index" asp-route-categoryId="@category.CategoryId">@category.Name</a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <h4>Products</h4>
+        @if (Model.Products.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>$@product.Price</td>
+                            <td>@Model.Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId)?.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No products found in this category.</p>
+        }
+    </div>
+</div>
+
+@* 
+@model Quick.Models.ProductDashboardViewModel
+
+@{
+    ViewData["Title"] = "Product Dashboard";
+}
+
+<h2>Product Dashboard</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Categories Section -->
+        <div class="col-md-4">
+            <h4>Categories</h4>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a asp-action="Index" asp-route-categoryId="">All</a>
+                </li>
+                @foreach (var category in Model.Categories)
+                {
+                    <li class="list-group-item @(Model.SelectedCategoryId == category.CategoryId ? "active" : "")">
+                        <a asp-action="Index" asp-route-categoryId="@category.CategoryId">@category.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Products Section -->
+        <div class="col-md-8">
+            <h4>Products</h4>
+            @DisplayProducts("All Products", Model.Products)
+
+            <h4>Products More Than $6</h4>
+            @DisplayProducts("Products Priced Above $6", Model.ProductsMoreThan6)
+
+            <h4>Products Less Than $6</h4>
+            @DisplayProducts("Products Priced Below $6", Model.ProductsLessThan6)
+        </div>
+    </div>
+</div>
+
+@helper DisplayProducts(string title, List<Quick.Models.Product> products)
+{
+    if (products.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Description</td>
+                        <td>$@product.Price.ToString("0.00")</td>
+                        <td>@Model.Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId)?.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No products found under "@title".</p>
+    }
+}
+ *@

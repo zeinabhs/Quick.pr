@@ -1,0 +1,66 @@
+﻿@model Quick.Models.ProductDashboardViewModel 
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Product List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+                @foreach (var category in Model.Categories)
+                {
+                    <button type="button" class="btn btn-secondary" onclick="filterProducts(@category.CategoryId)">
+                        @category.Name
+                    </button>
+                }
+            </div>
+            <div class="col-6 text-end">
+                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Product
+                </a>
+            </div>
+        </div>
+
+        <table id="tblData" class="table table-bordered table-striped" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Description</td>
+                        <td>@product.Price</td>
+                        <td>@Model.Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId)?.Name</td>
+                        <td>
+                            <img src="@product.ImageUrl" alt="@product.Name" width="100" height="100" />
+                        </td>
+                        <td>
+                            <!-- Add action buttons here (e.g., edit, delete) -->
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterProducts(categoryId) {
+            window.location.href = '@Url.Action("Index", "Product")' + '?categoryId=' + categoryId;
+        }
+    </script>
+}
